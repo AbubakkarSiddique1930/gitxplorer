@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository code
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -24,5 +25,5 @@ jobs:
         cmake -S . -B build -G Ninja
 
       - name: Build
-      - run: cmake --build build
+        run: cmake --build build
 
