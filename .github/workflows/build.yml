@@ -22,7 +22,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++
+          sudo apt-get install -y cmake g++ python3
 
       - name: Install dependencies (MacOS)
         if: runner.os == 'macOS'
@@ -32,12 +32,39 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' --yes
+          choco install python --yes
+
+
+      - name: Install Conan
+        run: pip install conan
+
+
+      - name: Cache Conan dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.conan2
+          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.*') }}
+          restore-keys: |
+            ${{ runner.os }}-conan-
+
+
+      - name: Configure Conan
+        run: conan profile detect --force
+
+
+      - name: Install Conan dependencies
+        run: conan install . \
+              --output-folder=build \
+              --build=missing \
+              --build_type=Release
 
 
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -S . -B build
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_TOOLCHAIN_FILE=./build/conan_toolchain.cmake
 
 
       - name: Build
