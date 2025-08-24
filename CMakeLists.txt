@@ -9,3 +9,4 @@ find_package(spdlog)
 add_executable(gitxplorer
     src/main.cpp
 )
+target_link_libraries(gitxplorer spdlog::spdlog)
