@@ -8,21 +8,37 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ ninja-build
+          sudo apt-get install -y cmake g++
+
+      - name: Install dependencies (MacOS)
+        if: runner.os == 'macOS'
+        run: brew install cmake python
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' --yes
+
 
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -S . -B build -G Ninja
+          cmake -S . -B build
+
 
       - name: Build
         run: cmake --build build
