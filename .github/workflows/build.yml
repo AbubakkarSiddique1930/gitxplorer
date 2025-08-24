@@ -53,17 +53,17 @@ jobs:
 
 
       - name: Install Conan dependencies
-        run: conan install . \
-              --output-folder=build \
-              --build=missing \
+        run: conan install .
+              --output-folder=build
+              --build=missing
               --build_type=Release
 
 
       - name: Configure CMake
         run: |
           mkdir build
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=Debug \
+          cmake -S . -B build
+            -DCMAKE_BUILD_TYPE=Debug
             -DCMAKE_TOOLCHAIN_FILE=./build/conan_toolchain.cmake
 
 
