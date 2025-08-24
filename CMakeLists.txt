@@ -4,7 +4,7 @@ project(project_gitxplorer
         VERSION 0.1.0
         LANGUAGES CXX)
 
-find_package(spdlog REQUIRED CONFIG)
+find_package(spdlog REQUIRED)
 
 add_executable(gitxplorer
     src/main.cpp
