@@ -6,3 +6,5 @@ class ConanDeps(ConanFile):
 
     def requirements(self):
         self.requires("spdlog/1.15.3")
+        self.requires("glfw/3.4")
+        self.requires("skia/138.20250708.0")
