@@ -51,24 +51,29 @@ jobs:
 
 
       - name: Configure Conan
-        run: |
-          conan profile detect --force
+        run: conan profile detect --force
+
+
+      - name: Export local Conan recipes
+        run: >
           conan export conan_extern/conan-skia/recipes/skia/all
-            --name=skia
-            --version=138.20250708.0
+          --name=skia
+          --version=138.20250708.0
 
 
       - name: Install Conan dependencies
-        run: conan install .
-              --output-folder=build
-              --build=missing
-              -s build_type=Release
+        run: >
+          conan install .
+          --output-folder=build
+          --build=missing
+          -s build_type=Release
 
 
       - name: Configure CMake
-        run: cmake -S . -B build
-              -DCMAKE_BUILD_TYPE=Release
-              -DCMAKE_TOOLCHAIN_FILE="build/conan_toolchain.cmake"
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_TOOLCHAIN_FILE="build/conan_toolchain.cmake"
 
 
       - name: Build
