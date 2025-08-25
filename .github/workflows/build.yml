@@ -24,7 +24,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ python3
+          sudo apt-get install -y cmake g++ python3 libgl1 libgl1-mesa-dri
 
       - name: Install dependencies (MacOS)
         if: runner.os == 'macOS'
@@ -63,7 +63,6 @@ jobs:
               --output-folder=build
               --build=missing
               -s build_type=Release
-              -c tools.system.package_manager:mode=install
 
 
       - name: Configure CMake
