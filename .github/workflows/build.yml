@@ -51,7 +51,7 @@ jobs:
       - name: Configure Conan
         run: |
           conan profile detect --force
-          conan export conan-extern/conan-skia/recipes/skia/all
+          conan export conan_extern/conan-skia/recipes/skia/all
             --name=skia
             --version=138.20250708.0
 
