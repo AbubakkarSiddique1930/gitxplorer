@@ -66,5 +66,5 @@ jobs:
 
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config Release
 
