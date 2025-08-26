@@ -83,6 +83,10 @@ jobs:
           -s compiler.cppstd=17
 
 
+      - name: Clean unnecessary Conan cache
+        run: conan cache clean "*" --build --source --download
+
+
       - name: Configure CMake
         run: >
           cmake -S . -B build
