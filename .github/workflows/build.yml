@@ -54,6 +54,10 @@ jobs:
         run: pip install conan
 
 
+      # We cache the Conan packages, especially since it takes a painful amount
+      # of time to install and build Skia, also the packages rarely ever change
+      # and if they change, it can easily be updated by simply deleting the
+      # cache
       - name: Cache Conan dependencies
         uses: actions/cache@v4
         with:
