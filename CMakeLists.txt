@@ -5,8 +5,11 @@ project(project_gitxplorer
         LANGUAGES CXX)
 
 find_package(spdlog REQUIRED CONFIG)
+find_package(glfw3 REQUIRED CONFIG)
 
 add_executable(gitxplorer
     src/main.cpp
+    src/window.cpp
 )
-target_link_libraries(gitxplorer spdlog::spdlog)
+target_include_directories(gitxplorer PRIVATE include)
+target_link_libraries(gitxplorer spdlog::spdlog glfw)
