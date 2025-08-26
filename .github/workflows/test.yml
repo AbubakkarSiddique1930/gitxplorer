@@ -25,7 +25,11 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ runner.os }}-build
-          path: build
+          path: build.tar
+
+
+      - name: Decompress build artifacts
+        run: tar -xvf build.tar
 
 
       - name: Run
