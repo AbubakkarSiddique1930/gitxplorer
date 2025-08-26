@@ -23,6 +23,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GH_PAT }}
           name: ${{ runner.os }}-build
           path: build
 
