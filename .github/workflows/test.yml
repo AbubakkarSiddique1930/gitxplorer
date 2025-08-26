@@ -1,0 +1,25 @@
+name: App test
+
+on:
+  workflow_run:
+    workflows: ["Compilation test"]
+    types:
+      - completed
+
+jobs:
+  test:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ runner.os }}-build
+          path: build
+
+      - name: Run
+        run: build/gitxplorer
