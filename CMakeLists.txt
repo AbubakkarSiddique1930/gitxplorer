@@ -6,10 +6,12 @@ project(project_gitxplorer
 
 find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
+find_package(skia REQUIRED CONFIG)
 
 add_executable(gitxplorer
     src/main.cpp
     src/window.cpp
+    src/sk.cpp
 )
 target_include_directories(gitxplorer PRIVATE include)
-target_link_libraries(gitxplorer spdlog::spdlog glfw)
+target_link_libraries(gitxplorer spdlog::spdlog glfw skia::skia)
