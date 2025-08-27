@@ -1,0 +1,43 @@
+name: Compare images
+
+on:
+  workflow_run:
+    workflows: ["App test"]
+    types:
+      - completed
+
+jobs:
+  compare:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+
+      - name: Install necessary tools
+        run: |
+          sudo apt update
+          sudo apt install -y imagemagick
+            
+
+      - name: Download images
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Compare image (Linux)
+        run: compare -metric RMSE test/golden.png Linux.png o.png
+
+
+      - name: Compare image (MacOS)
+        run: compare -metric RMSE test/golden.png macOS.png o.png
+
+
+      - name: Compare image (Windows)
+        run: compare -metric RMSE test/golden.png Windows.png o.png
+
+

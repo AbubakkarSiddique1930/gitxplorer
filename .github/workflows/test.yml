@@ -32,4 +32,11 @@ jobs:
 
 
       - name: Run
-        run: build/gitxplorer
+        run: build/test ${{ runner.os }}.png
+
+
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+          with:
+            name: ${{ runner.os }}-image
+            path: ${{ runner.os }}.png
