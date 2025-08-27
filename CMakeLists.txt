@@ -8,10 +8,18 @@ find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 find_package(skia REQUIRED CONFIG)
 
-add_executable(gitxplorer
-    src/main.cpp
+add_library(sourcelib STATIC
     src/window.cpp
     src/sk.cpp
+    src/font.cpp
 )
-target_include_directories(gitxplorer PRIVATE include)
-target_link_libraries(gitxplorer spdlog::spdlog glfw skia::skia)
+target_include_directories(sourcelib PUBLIC include)
+target_link_libraries(sourcelib spdlog::spdlog glfw skia::skia)
+
+add_executable(gitxplorer src/main.cpp)
+target_link_libraries(gitxplorer sourcelib)
+
+if(BUILD_TEST_EXE STREQUAL "ON")
+    add_executable(test test/test.cpp)
+    target_link_libraries(test sourcelib)
+endif()
