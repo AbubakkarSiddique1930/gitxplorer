@@ -96,6 +96,7 @@ jobs:
           cmake -S . -B build
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_TOOLCHAIN_FILE="build/conan_toolchain.cmake"
+          -DBUILD_TEST_EXE=ON
 
 
       - name: Build
