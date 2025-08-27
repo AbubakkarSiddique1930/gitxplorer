@@ -5,6 +5,7 @@
 
 // Platform dependent FontMgr
 #ifdef __APPLE__
+    #error TEST
     #include <include/ports/SkFontMgr_mac_ct.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_CoreText(nullptr);
 #elif __unix__
