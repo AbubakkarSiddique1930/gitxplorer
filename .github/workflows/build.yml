@@ -41,7 +41,7 @@ jobs:
 
       - name: Install dependencies (MacOS)
         if: runner.os == 'macOS'
-        run: brew install cmake python
+        run: brew install python
 
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
