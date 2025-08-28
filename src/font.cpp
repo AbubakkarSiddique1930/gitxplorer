@@ -7,10 +7,10 @@
 #ifdef __APPLE__
     #include <include/ports/SkFontMgr_mac_ct.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_CoreText(nullptr);
-#elif defined(__unix__)
+#elif __unix__
     #include <include/ports/SkFontMgr_fontconfig.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_FontConfig(nullptr);
-#elif defined(_WIN32)
+#elif _WIN32
     #include <include/ports/SkTypeface_win.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_DirectWrite(nullptr);
 #else
