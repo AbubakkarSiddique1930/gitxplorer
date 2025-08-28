@@ -35,6 +35,8 @@ jobs:
         run: |
           cd build
           test ${{ runner.os }}.png
+          ls
+          ls ..
 
 
       - name: Upload image
