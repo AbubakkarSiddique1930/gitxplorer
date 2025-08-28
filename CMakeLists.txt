@@ -7,6 +7,7 @@ project(project_gitxplorer
 find_package(spdlog REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
 find_package(skia REQUIRED CONFIG)
+find_package(OpenGL REQUIRED)
 
 add_library(sourcelib STATIC
     src/window.cpp
@@ -14,7 +15,7 @@ add_library(sourcelib STATIC
     src/font.cpp
 )
 target_include_directories(sourcelib PUBLIC include)
-target_link_libraries(sourcelib spdlog::spdlog glfw skia::skia)
+target_link_libraries(sourcelib spdlog::spdlog glfw skia::skia OpenGL::GL)
 
 add_executable(gitxplorer src/main.cpp)
 target_link_libraries(gitxplorer sourcelib)
