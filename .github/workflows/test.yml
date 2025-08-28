@@ -33,7 +33,6 @@ jobs:
 
       - name: Run
         run: |
-          cd build
           test ${{ runner.os }}.png
           ls
           ls ..
