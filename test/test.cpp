@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include <cstdio>
 #include <include/core/SkCanvas.h>
@@ -12,12 +13,17 @@
 #include <include/encode/SkPngEncoder.h>
 
 #include <font.hpp>
+#include <spdlog/spdlog.h>
 
 void WriteSurfaceToPNG(sk_sp<SkSurface> surface, const char* imagePath) {
     sk_sp<SkImage> img = surface->makeImageSnapshot();
 
     auto png = SkPngEncoder::Encode(nullptr, img.get(), {});
     SkFILEWStream file(imagePath);
+    if(!file.isValid()) {
+        spdlog::error("Failed to write png file at {}", imagePath);
+        exit(-1);
+    }
     file.write(png->data(), png->size());
 }
 
