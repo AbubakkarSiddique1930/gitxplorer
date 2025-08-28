@@ -5,12 +5,15 @@
 
 // Platform dependent FontMgr
 #ifdef __APPLE__
+    #define T APPLE
     #include <include/ports/SkFontMgr_mac_ct.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_CoreText(nullptr);
 #elif __unix__
+    #define T UNIX
     #include <include/ports/SkFontMgr_fontconfig.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_FontConfig(nullptr);
 #elif _WIN32
+    #define T WINDOWS
     #include <include/ports/SkTypeface_win.h>
     sk_sp<SkFontMgr> fontMgr = SkFontMgr_New_DirectWrite(nullptr);
 #else
