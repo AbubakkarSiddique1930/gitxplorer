@@ -13,14 +13,15 @@ GrDirectContext* SK::context = nullptr;
 SkSurface* SK::surface = nullptr;
 SkCanvas* SK::canvas = nullptr;
 
+static void* GetGLProc(void*, const char* p) {
+    return (void*)glfwGetProcAddress(p);
+}
+
 void SK::Init(int w, int h) {
     auto interface = GrGLMakeNativeInterface();
     if(!interface)
         interface = GrGLMakeAssembledInterface(
-            nullptr,
-            (GrGLGetProc)* [](void*, const char* p) -> void* {
-                return (void*)glfwGetProcAddress(p);
-            }
+            nullptr, (GrGLGetProc)* GetGLProc
         );
 
     context = GrDirectContexts::MakeGL(interface).release();
