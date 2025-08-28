@@ -21,9 +21,8 @@ void SK::Init(int w, int h) {
     auto interface = GrGLMakeNativeInterface();
     if(!interface)
         interface = GrGLMakeAssembledInterface(
-            nullptr, (GrGLGetProc)* GetGLProc
+            nullptr, (GrGLGetProc) GetGLProc
         );
-
     context = GrDirectContexts::MakeGL(interface).release();
 
     GrGLFramebufferInfo fbInfo;
