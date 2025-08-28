@@ -29,10 +29,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Testing
-        run: ls
-
-
       - name: Compare image (Linux)
         run: compare -metric RMSE test/golden.png Linux.png o.png
 
