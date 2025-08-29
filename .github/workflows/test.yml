@@ -32,7 +32,7 @@ jobs:
 
 
       - name: Run
-        run: ./build/test ${{ runner.os }}.png
+        run: build/test ${{ runner.os }}.png
 
 
       - name: Upload image
