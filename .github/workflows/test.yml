@@ -37,7 +37,7 @@ jobs:
 
 
       - name: Run (Windows)
-        if: runner.os != 'Windows'
+        if: runner.os == 'Windows'
         run: build/Release/test ${{ runner.os }}.png
 
 
