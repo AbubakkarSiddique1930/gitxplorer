@@ -31,8 +31,14 @@ jobs:
         run: tar -xvf build.tar
 
 
-      - name: Run
+      - name: Run (Linux & MacOS)
+        if: runner.os != 'Windows'
         run: build/test ${{ runner.os }}.png
+
+
+      - name: Run (Windows)
+        if: runner.os != 'Windows'
+        run: build/Release/test ${{ runner.os }}.png
 
 
       - name: Upload image
