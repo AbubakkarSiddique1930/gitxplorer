@@ -30,14 +30,14 @@ jobs:
 
 
       - name: Compare image (Linux)
-        run: ls && compare -metric RMSE test/golden.png Linux.png o.png
+        run: compare -metric RMSE test/golden.png Linux-img/test.png o.png
 
 
       - name: Compare image (MacOS)
-        run: compare -metric RMSE test/golden.png macOS.png o.png
+        run: compare -metric RMSE test/golden.png macOS-img/test.png o.png
 
 
       - name: Compare image (Windows)
-        run: compare -metric RMSE test/golden.png Windows.png o.png
+        run: compare -metric RMSE test/golden.png Windows-img/test.png o.png
 
 

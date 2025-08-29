@@ -38,11 +38,11 @@ jobs:
 
       - name: Run (Windows)
         if: runner.os == 'Windows'
-        run: build/Release/test ${{ runner.os }}.png
+        run: build/Release/test test.png
 
 
       - name: Upload image
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ runner.os }}-image
+          name: ${{ runner.os }}-img
           path: ${{ runner.os }}.png
