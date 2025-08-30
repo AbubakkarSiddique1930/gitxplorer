@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <include/core/SkFontTypes.h>
 #include <iostream>
 #include <cstdio>
 #include <include/core/SkCanvas.h>
@@ -46,6 +47,11 @@ int main(int argc, char* argv[]) {
     SkFont fontComfortaa = Font::LoadFontFromFile(
         "resources/fonts/Comfortaa/Comfortaa-Medium.ttf", 32
     );
+
+    fontMononoki.setEdging(SkFont::Edging::kAlias);
+    fontComfortaa.setEdging(SkFont::Edging::kAlias);
+    fontMononoki.setHinting(SkFontHinting::kNone);
+    fontComfortaa.setHinting(SkFontHinting::kNone);
 
     canvas->drawPaint(bgPaint);
     canvas->drawSimpleText(
