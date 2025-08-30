@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
 
     SkPaint bgPaint{SkColors::kCyan};
     SkPaint fgPaint{SkColors::kBlack};
+    fgPaint.setAntiAlias(false);
 
     SkFont fontMononoki = Font::LoadFontFromFile(
         "resources/fonts/mononoki/mononoki-Regular.ttf", 32
