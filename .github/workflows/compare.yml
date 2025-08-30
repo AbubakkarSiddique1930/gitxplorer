@@ -19,7 +19,7 @@ jobs:
       - name: Install necessary tools
         run: |
           sudo apt update
-          sudo apt install -y imagemagick
+          sudo apt install -y imagemagick-7.q16hdri
             
 
       - name: Download images
