@@ -16,6 +16,12 @@ jobs:
         uses: actions/checkout@v4
 
 
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfuse2
+
+
       - name: Get ImageMagick
         run: >
           wget https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-2/ImageMagick-8289a33-gcc-x86_64.AppImage
