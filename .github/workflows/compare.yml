@@ -16,10 +16,11 @@ jobs:
         uses: actions/checkout@v4
 
 
-      - name: Install necessary tools
-        run: |
-          sudo apt update
-          sudo apt install -y imagemagick-7.q16hdri
+      - name: Get ImageMagick
+        run: >
+          wget https://github.com/ImageMagick/ImageMagick/releases/download/7.1.2-2/ImageMagick-8289a33-gcc-x86_64.AppImage
+          -O im.AppImage &&
+          chmod +rx ./im.AppImage
             
 
       - name: Download images
@@ -30,14 +31,26 @@ jobs:
 
 
       - name: Compare image (Linux)
-        run: compare -metric SSIM test/golden.png Linux-img/test.png o.png
+        run: >
+          ./im.AppImage compare
+          -metric SSIM
+          test/golden.png Linux-img/test.png
+          o.png
 
 
       - name: Compare image (MacOS)
-        run: compare -metric SSIM test/golden.png macOS-img/test.png o.png
+        run: >
+          ./im.AppImage compare
+          -metric SSIM
+          test/golden.png macOS-img/test.png
+          o.png
 
 
       - name: Compare image (Windows)
-        run: compare -metric SSIM test/golden.png Windows-img/test.png o.png
+        run: >
+          ./im.AppImage compare
+          -metric SSIM
+          test/golden.png Windows-img/test.png
+          o.png
 
 
