@@ -39,7 +39,6 @@ int main(int argc, char* argv[]) {
 
     SkPaint bgPaint{SkColors::kCyan};
     SkPaint fgPaint{SkColors::kBlack};
-    fgPaint.setAntiAlias(false);
 
     SkFont fontMononoki = Font::LoadFontFromFile(
         "resources/fonts/mononoki/mononoki-Regular.ttf", 32
@@ -48,10 +47,12 @@ int main(int argc, char* argv[]) {
         "resources/fonts/Comfortaa/Comfortaa-Medium.ttf", 32
     );
 
-    fontMononoki.setEdging(SkFont::Edging::kAlias);
-    fontComfortaa.setEdging(SkFont::Edging::kAlias);
-    fontMononoki.setHinting(SkFontHinting::kNone);
-    fontComfortaa.setHinting(SkFontHinting::kNone);
+    fontMononoki.setSubpixel(true);
+    fontMononoki.setHinting(SkFontHinting::kNormal);
+    fontMononoki.setEdging(SkFont::Edging::kSubpixelAntiAlias);
+    fontComfortaa.setSubpixel(true);
+    fontComfortaa.setHinting(SkFontHinting::kNormal);
+    fontComfortaa.setEdging(SkFont::Edging::kSubpixelAntiAlias);
 
     canvas->drawPaint(bgPaint);
     canvas->drawSimpleText(
