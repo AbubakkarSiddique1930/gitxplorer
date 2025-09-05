@@ -33,16 +33,18 @@ jobs:
 
       - name: Run (Linux & MacOS)
         if: runner.os != 'Windows'
-        run: build/test test.png
+        run: build/test test.png alt_test.png
 
 
       - name: Run (Windows)
         if: runner.os == 'Windows'
-        run: build/Release/test test.png
+        run: build/Release/test test.png alt_test.png
 
 
       - name: Upload image
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-img
-          path: test.png
+          path: |
+            test.png
+            alt_test.png

@@ -30,7 +30,7 @@ void WriteSurfaceToPNG(sk_sp<SkSurface> surface, const char* imagePath) {
 
 int main(int argc, char* argv[]) {
     
-    if(argc < 2)
+    if(argc < 3)
         return -1;
 
     SkImageInfo iinfo = SkImageInfo::MakeN32Premul(256, 256);
@@ -54,6 +54,7 @@ int main(int argc, char* argv[]) {
     fontComfortaa.setHinting(SkFontHinting::kNormal);
     fontComfortaa.setEdging(SkFont::Edging::kSubpixelAntiAlias);
 
+    // Golden image
     canvas->drawPaint(bgPaint);
     canvas->drawSimpleText(
         "Hello", 5, SkTextEncoding::kUTF8,
@@ -65,6 +66,19 @@ int main(int argc, char* argv[]) {
     );
 
     WriteSurfaceToPNG(surface, argv[1]);
+
+    // Alt golden image
+    canvas->drawPaint(bgPaint);
+    canvas->drawSimpleText(
+        "Hell", 4, SkTextEncoding::kUTF8,
+        50, 50, fontMononoki, fgPaint
+    );
+    canvas->drawSimpleText(
+        "World", 5, SkTextEncoding::kUTF8,
+        50, 90, fontComfortaa, fgPaint
+    );
+
+    WriteSurfaceToPNG(surface, argv[2]);
 
     return 0;
 }
