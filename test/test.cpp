@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <include/core/SkFontTypes.h>
+#include <include/private/base/SkPoint_impl.h>
 #include <iostream>
 #include <cstdio>
 #include <include/core/SkCanvas.h>
@@ -39,6 +40,24 @@ int main(int argc, char* argv[]) {
 
     SkPaint bgPaint{SkColors::kCyan};
     SkPaint fgPaint{SkColors::kBlack};
+    SkPaint paintRed{SkColors::kRed};
+    paintRed.setStyle(SkPaint::kStroke_Style);
+    paintRed.setStrokeWidth(5);
+    SkPaint paintGreen{SkColors::kGreen};
+    SkPaint paintBlue{SkColors::kBlue};
+    paintBlue.setStrokeWidth(10);
+    paintBlue.setStrokeCap(SkPaint::kRound_Cap);
+
+    /*****************************[ Golden image ]*****************************/
+
+    canvas->drawPaint(bgPaint);
+    canvas->drawCircle(SkPoint::Make(128, 128), 64, paintGreen);
+    canvas->drawRect(SkRect::MakeXYWH(64, 64, 128, 128), paintRed);
+    canvas->drawLine(SkPoint::Make(64, 64), SkPoint::Make(192, 192), paintBlue);
+
+    WriteSurfaceToPNG(surface, argv[1]);
+
+    /***************************[ Text Golden image ]**************************/
 
     SkFont fontMononoki = Font::LoadFontFromFile(
         "resources/fonts/mononoki/mononoki-Regular.ttf", 32
@@ -47,30 +66,10 @@ int main(int argc, char* argv[]) {
         "resources/fonts/Comfortaa/Comfortaa-Medium.ttf", 32
     );
 
-    fontMononoki.setSubpixel(true);
-    fontMononoki.setHinting(SkFontHinting::kNormal);
-    fontMononoki.setEdging(SkFont::Edging::kSubpixelAntiAlias);
-    fontComfortaa.setSubpixel(true);
-    fontComfortaa.setHinting(SkFontHinting::kNormal);
-    fontComfortaa.setEdging(SkFont::Edging::kSubpixelAntiAlias);
-
-    // Golden image
+    // Text golden image
     canvas->drawPaint(bgPaint);
     canvas->drawSimpleText(
         "Hello", 5, SkTextEncoding::kUTF8,
-        50, 50, fontMononoki, fgPaint
-    );
-    canvas->drawSimpleText(
-        "World", 5, SkTextEncoding::kUTF8,
-        50, 90, fontComfortaa, fgPaint
-    );
-
-    WriteSurfaceToPNG(surface, argv[1]);
-
-    // Alt golden image
-    canvas->drawPaint(bgPaint);
-    canvas->drawSimpleText(
-        "Hell", 4, SkTextEncoding::kUTF8,
         50, 50, fontMononoki, fgPaint
     );
     canvas->drawSimpleText(
