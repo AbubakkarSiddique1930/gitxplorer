@@ -1,86 +1,80 @@
-import subprocess
+import sys
+import cv2
+import pytesseract
 from wand.image import Image
-from tabulate import tabulate
-from pathlib import Path
-import wand
 
-METRICS = [
-    'absolute',
-    'perceptual_hash',
-    'root_mean_square',
-    'structural_similarity',
-    'structural_dissimilarity',
-    'peak_signal_to_noise_ratio'
-]
 GOLDEN_FILE = 'test/golden.png'
-ALT_GOLDEN_FILE = 'test/alt_golden.png'
-FILES = [
-    ['Linux-img/test.png', GOLDEN_FILE],
-    ['macOS-img/test.png', GOLDEN_FILE],
-    ['Windows-img/test.png', GOLDEN_FILE],
-
-    ['Linux-img/test.png', ALT_GOLDEN_FILE],
-    ['macOS-img/test.png', ALT_GOLDEN_FILE],
-    ['Windows-img/test.png', ALT_GOLDEN_FILE],
-
-    ['Linux-img/alt_test.png', GOLDEN_FILE],
-    ['macOS-img/alt_test.png', GOLDEN_FILE],
-    ['Windows-img/alt_test.png', GOLDEN_FILE],
-
-    ['Linux-img/alt_test.png', ALT_GOLDEN_FILE],
-    ['macOS-img/alt_test.png', ALT_GOLDEN_FILE],
-    ['Windows-img/alt_test.png', ALT_GOLDEN_FILE],
+TEXT_GOLDEN_FILE = 'test/text_golden.png'
+TEST_FILES = [
+    [f'Linux-img/{sys.argv[1]}.png', GOLDEN_FILE],
+    [f'macOS-img/{sys.argv[1]}.png', GOLDEN_FILE],
+    [f'Windows-img/{sys.argv[1]}.png', GOLDEN_FILE],
+]
+TEXT_TEST_FILES = [
+    [f'Linux-img/{sys.argv[2]}.png', TEXT_GOLDEN_FILE],
+    [f'macOS-img/{sys.argv[2]}.png', TEXT_GOLDEN_FILE],
+    [f'Windows-img/{sys.argv[2]}.png', TEXT_GOLDEN_FILE],
 ]
 
-name_results:dict[str, list[dict]] = dict()
-metric_results:dict[str, list[dict]] = dict()
+COMPARE_TOLERANCE = 2
 
-def as_path(path: str) -> str:
-    return str(Path(path).resove())
-
-def compare(img1: str, img2: str, metric: str):
+def compare(img1, img2):
     with Image(filename=img1) as i1:
         with Image(filename=img2) as i2:
-            diff = i1.compare(i2, metric=metric)
-            return dict(name=f'{img1} - {img2}', score=diff[1])
+            diff = i1.compare(i2, metric='absolute')
+            return diff[1]
 
-def test():
-    for metric in METRICS:
-        for file in FILES:
-            result = compare(file[0], file[1], metric)
-            name_results.setdefault(result['name'], []).append(dict(metric=metric, score=result['score']))
-            metric_results.setdefault(metric, []).append(dict(name=result['name'], score=result['score']))
+def golden_test():
+    fails = []
+    for file in TEST_FILES:
+        result = compare(file[0], file[1])
+        if result != 0:
+            fails.append([file, result])
+    return fails
 
-def prepare_result() -> str:
-    result = ''
-    result += 'Results by names:\n'
-    result += '================='
-    result += '\n'*3
+def img_ocr(path):
+    img = cv2.imread(path)
+    gry = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return pytesseract.image_to_data(gry, output_type=pytesseract.Output.DICT)
 
-    for res_name, res_value in name_results.items():
-        result += res_name + ':\n'
-        result += '-'*(len(res_name)+1) + '\n'
-        result += tabulate(res_value, headers="keys", tablefmt="basic") + '\n\n'
+def compare_list_tol(lst1, lst2, tolerance):
+    for e1, e2 in zip(lst1, lst2):
+        if abs(e1-e2) > tolerance:
+            return False
+    return True
 
-    result += '\n'*3
-    result += 'Results by metrics:\n'
-    result += '==================='
-    result += '\n'*3
+def bound_match(textd, golden_textd):
+    return compare_list_tol(
+        textd['left'], golden_textd['left'], COMPARE_TOLERANCE
+        ) and compare_list_tol(
+        textd['top'], golden_textd['top'], COMPARE_TOLERANCE
+        ) and compare_list_tol(
+        textd['width'], golden_textd['width'], COMPARE_TOLERANCE
+        ) and compare_list_tol(
+        textd['height'], golden_textd['height'], COMPARE_TOLERANCE)
 
-    for res_name, res_value in metric_results.items():
-        result += res_name + ':\n'
-        result += '-'*(len(res_name)+1) + '\n'
-        result += tabulate(res_value, headers="keys", tablefmt="basic") + '\n\n'
-
-    return result
+def text_golden_test():
+    fails = []
+    for file in TEXT_TEST_FILES:
+        textd = img_ocr(file[0])
+        golden_textd = img_ocr(file[1])
+        if textd['text'] != golden_textd['text']:
+            fails.append([file, 'Text Mismatch'])
+        if not bound_match(textd, golden_textd):
+            fails.append([file, 'Transformation Mismatch'])
+    return fails
 
 def main():
-    test()
-    final_result = prepare_result()
-    print(final_result)
-    with open('report.txt', 'w') as file:
-        file.write(final_result)
+    fail = False
+    fails = golden_test()
+    fails += text_golden_test()
+    if len(fails) > 0:
+        fail = True
+        for f in fails:
+            print(f'Failure: {f[0]} (diff: {f[1]})')
 
+    if fail:
+        exit(-1)
 
 
 if __name__ == '__main__':

@@ -33,12 +33,12 @@ jobs:
 
       - name: Run (Linux & MacOS)
         if: runner.os != 'Windows'
-        run: build/test test.png alt_test.png
+        run: build/test test.png text_test.png
 
 
       - name: Run (Windows)
         if: runner.os == 'Windows'
-        run: build/Release/test test.png alt_test.png
+        run: build/Release/test test.png text_test.png
 
 
       - name: Upload image
@@ -47,4 +47,4 @@ jobs:
           name: ${{ runner.os }}-img
           path: |
             test.png
-            alt_test.png
+            text_test.png
